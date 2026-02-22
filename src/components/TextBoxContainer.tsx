@@ -2,7 +2,7 @@ import { List, ListItem, Table, TableBody} from "@mui/material";
 import { useEffect, useState } from "react";
 import CopyPastableTextBox from "./CopyPastableTextBox";
 import humanizeDuration from "humanize-duration";
-import { Campaign, NotStarted, PauseCircle, PlayCircle, StopCircle } from "@mui/icons-material";
+import { Campaign, NotStarted, PauseCircle, PlayCircle, RestartAlt, StopCircle } from "@mui/icons-material";
 import { DataContext, INITIAL_DATA } from "../context";
 
 const TextBoxContainer = () => {
@@ -47,15 +47,14 @@ const TextBoxContainer = () => {
         setTimerRunning(true);
         return true;
     };
-    const stop = () => {
-        if (!timerRunning) {
-            alert("The timer is not running.");
-            return false;
+    const reset = () => {
+        if (confirm("Are you sure you want to reset all the timers?")) {
+            setTimerRunning(false);
+            setSecondsElapsed(0);
+            return true;
         }
-        setTimerRunning(false);
-        setSecondsElapsed(0);
-        return true;
-    };
+        return false;
+    }
     const appendHistory = (text: string) => {
         setHistory((prev) => [...prev, text]);
     };
@@ -86,8 +85,14 @@ const TextBoxContainer = () => {
                     <CopyPastableTextBox
                         label="Stop"
                         icon={<StopCircle/>}
-                        onCopy={stop}
-                        textTemplate={`Ended at {time}. {timeElapsed} completed.`}
+                        onCopy={pause}
+                        textTemplate={`Ended at {time}.`}
+                    />
+                    <CopyPastableTextBox
+                        label="Reset"
+                        icon={<RestartAlt/>}
+                        onCopy={reset}
+                        textTemplate={`Timers reset.`}
                     />
                     <CopyPastableTextBox
                         label="Update"
