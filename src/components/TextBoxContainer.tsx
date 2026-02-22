@@ -54,7 +54,7 @@ const TextBoxContainer = () => {
         return true;
     }
     const reset = () => {
-        if (confirm("Are you sure you want to reset all the timers?")) {
+        if (confirm("Are you sure you want to reset your leeching session?")) {
             setTimerRunning(false);
             setSecondsElapsed(0);
             setFinished(false);
