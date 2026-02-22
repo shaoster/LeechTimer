@@ -1,0 +1,16 @@
+import { createContext } from "react";
+
+export const INITIAL_DATA = {
+    time: new Date().toUTCString(),
+    timeElapsed: "0 seconds",
+};
+
+export type DataContextType = {
+    data: Record<string, string | number>;
+    appendHistory: (text: string) => void;
+};
+
+export const DataContext = createContext<DataContextType>({
+    data: INITIAL_DATA,
+    appendHistory: () => {}
+});
