@@ -18,9 +18,9 @@ const TextBoxContainer = () => {
             if (timerRunning) {
                 setSecondsElapsed((prev) => prev + 1);
             }
-            const formattedDate = new Date().toUTCString().substring(5);
+            const formattedDate = new Date().toUTCString().slice(5, -4);
             setData({
-                time: formattedDate.substring(0, formattedDate.length - 4),
+                time: formattedDate,
                 timeElapsed: humanizeDuration(secondsElapsed * 1000),
             })
         }, 1000);

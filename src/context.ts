@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 export const INITIAL_DATA = {
-    time: "Loading...",
+    time: new Date().toUTCString().slice(5, -4),
     timeElapsed: "0 seconds",
 };
 
