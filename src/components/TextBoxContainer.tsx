@@ -1,15 +1,17 @@
-import { Button, List, ListItem, Table, TableBody} from "@mui/material";
+import { Alert, Button, Fade, List, ListItem, Snackbar, Table, TableBody} from "@mui/material";
 import { useEffect, useState } from "react";
 import CopyPastableTextBox from "./CopyPastableTextBox";
 import humanizeDuration from "humanize-duration";
 import { Campaign, NotStarted, PauseCircle, PlayCircle, RestartAlt, CheckCircle, DeleteForever } from "@mui/icons-material";
 import { DataContext, INITIAL_DATA } from "../context";
+import { TransitionGroup } from "react-transition-group";
 
 const TextBoxContainer = () => {
     const [timerRunning, setTimerRunning] = useState(false);
     const [secondsElapsed, setSecondsElapsed] = useState(0);
     const [data, setData] = useState(INITIAL_DATA);
-    const [finished, setFinished] = useState(false)
+    const [finished, setFinished] = useState(false);
+    const [showCopied, setShowCopied] = useState(false);
     const [history, setHistory] = useState<Array<string>>([]);
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -73,10 +75,17 @@ const TextBoxContainer = () => {
         }
     }
     return (<div>
-        <h1>Leech Events</h1>
+        <h1>
+            Leech Events
+            &nbsp;
+            <Button variant="outlined" startIcon={<RestartAlt/>} onClick={reset} disabled={resetDisabled}>
+                Reset Leech
+            </Button>
+
+        </h1>
         <Table>
             <TableBody>
-                <DataContext.Provider value={{data: data, appendHistory: appendHistory}}>
+                <DataContext.Provider value={{data: data, appendHistory: appendHistory, setShowCopied: setShowCopied}}>
                     <CopyPastableTextBox
                         label="Start"
                         icon={<PlayCircle/>}
@@ -111,13 +120,6 @@ const TextBoxContainer = () => {
                         textTemplate={`{timeElapsed} elapsed.`}
                         disabled={updateDisabled}
                     />
-                    <CopyPastableTextBox
-                        label="Reset"
-                        icon={<RestartAlt/>}
-                        onCopy={reset}
-                        textTemplate={`Timers reset.`}
-                        disabled={resetDisabled}
-                    />
                 </DataContext.Provider>
             </TableBody>
         </Table>
@@ -130,13 +132,31 @@ const TextBoxContainer = () => {
         </h1>
         {history.length == 0 ? <ListItem>No Events Yet</ListItem> :
             <List>
-                {history.map((entry)=> (
-                    <ListItem>
-                        {entry}
-                    </ListItem>
-                ))}
+                <TransitionGroup>
+                    {history.map((entry, index)=> (
+                        <Fade key={index} timeout={500}>
+                            <ListItem>
+                                {entry}
+                            </ListItem>
+                        </Fade>
+                    ))}
+                </TransitionGroup>
             </List>
         }
+        <Snackbar
+            open={showCopied}
+            autoHideDuration={2000}
+            onClose={()=>setShowCopied(false)}
+        >
+            <Alert
+                onClose={()=>setShowCopied(false)}
+                severity="success"
+                variant="filled"
+                sx={{ width: '100%'}}
+            >
+                Copied to clipboard!
+            </Alert>
+        </Snackbar>
     </div>);
 }
 

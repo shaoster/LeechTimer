@@ -8,9 +8,11 @@ export const INITIAL_DATA = {
 export type DataContextType = {
     data: Record<string, string | number>;
     appendHistory: (text: string) => void;
+    setShowCopied: (status: boolean) => void;
 };
 
 export const DataContext = createContext<DataContextType>({
     data: INITIAL_DATA,
-    appendHistory: () => {}
+    appendHistory: () => {},
+    setShowCopied: () => {},
 });

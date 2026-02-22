@@ -42,7 +42,8 @@ const CopyPastableTextBox = (props: CopyPastableTextBoxInput) => {
     } = props;
     const {
         data,
-        appendHistory
+        appendHistory,
+        setShowCopied,
     } = useContext<DataContextType>(DataContext);
     const renderedText = fillTemplate(textTemplate, data);
     console.log(renderedText);
@@ -53,6 +54,7 @@ const CopyPastableTextBox = (props: CopyPastableTextBoxInput) => {
             }
         }
         navigator.clipboard.writeText(renderedText);
+        setShowCopied(true);
         appendHistory(renderedText);
     };
 
