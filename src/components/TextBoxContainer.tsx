@@ -64,7 +64,7 @@ const TextBoxContainer = () => {
         }
         return false;
     }
-    const resetDisabled = secondsElapsed == 0;
+    const resetDisabled = !finished;
     const updateDisabled = secondsElapsed == 0 || finished;
     const appendHistory = (text: string) => {
         setHistory((prev) => [...prev, text]);
@@ -126,7 +126,7 @@ const TextBoxContainer = () => {
         <h1>
             History
             &nbsp;
-            <Button variant="outlined" startIcon={<DeleteForever/>} onClick={clearHistory} disabled={history.length == 0 || !finished}>
+            <Button variant="outlined" startIcon={<DeleteForever/>} onClick={clearHistory} disabled={history.length == 0 || secondsElapsed != 0}>
                 Clear
             </Button>
         </h1>
