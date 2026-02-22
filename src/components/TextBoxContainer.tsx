@@ -87,7 +87,7 @@ const TextBoxContainer = () => {
                         label="Stop"
                         icon={<StopCircle/>}
                         onCopy={stop}
-                        textTemplate={`Ended at {time}.`}
+                        textTemplate={`Ended at {time}. {timeElapsed} completed.`}
                     />
                     <CopyPastableTextBox
                         label="Update"
