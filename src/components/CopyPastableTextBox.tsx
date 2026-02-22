@@ -7,6 +7,7 @@ export type CopyPastableTextBoxInput = {
     label: string;
     icon: React.ReactNode;
     textTemplate: string;
+    disabled?: boolean;
     onCopy?: () => boolean;
 }
 
@@ -36,7 +37,8 @@ const CopyPastableTextBox = (props: CopyPastableTextBoxInput) => {
         icon,
         label,
         onCopy,
-        textTemplate
+        textTemplate,
+        disabled,
     } = props;
     const {
         data,
@@ -57,7 +59,7 @@ const CopyPastableTextBox = (props: CopyPastableTextBoxInput) => {
     return (
         <TableRow>
             <TableCell>
-                <Button variant="outlined" startIcon={icon} onClick={onClick}>
+                <Button variant="outlined" startIcon={icon} onClick={onClick} disabled={disabled}>
                     {label}
                 </Button>
             </TableCell>

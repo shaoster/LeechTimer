@@ -2,7 +2,7 @@ import { List, ListItem, Table, TableBody} from "@mui/material";
 import { useEffect, useState } from "react";
 import CopyPastableTextBox from "./CopyPastableTextBox";
 import humanizeDuration from "humanize-duration";
-import { Campaign, NotStarted, PauseCircle, PlayCircle, RestartAlt, StopCircle } from "@mui/icons-material";
+import { Campaign, NotStarted, PauseCircle, PlayCircle, RestartAlt, CheckCircle } from "@mui/icons-material";
 import { DataContext, INITIAL_DATA } from "../context";
 
 const TextBoxContainer = () => {
@@ -15,8 +15,9 @@ const TextBoxContainer = () => {
             if (timerRunning) {
                 setSecondsElapsed((prev) => prev + 1);
             }
+            const formattedDate = new Date().toUTCString().substring(5);
             setData({
-                time: new Date().toUTCString(),
+                time: formattedDate.substring(0, formattedDate.length - 4),
                 timeElapsed: humanizeDuration(secondsElapsed * 1000),
             })
         }, 1000);
@@ -24,13 +25,10 @@ const TextBoxContainer = () => {
     }, [timerRunning, secondsElapsed]);
 
     const start = () => {
-        if (timerRunning || secondsElapsed > 0) {
-            alert("Please stop the timer first before restarting.");
-            return false;
-        }
         setTimerRunning(true);
         return true;
     };
+    const startDisabled = timerRunning || secondsElapsed > 0;
     const pause = () => {
         if (!timerRunning) {
             alert("The timer is not running.");
@@ -39,14 +37,12 @@ const TextBoxContainer = () => {
         setTimerRunning(false);
         return true;
     };
+    const pauseDisabled = !timerRunning || secondsElapsed == 0;
     const resume = () => {
-        if (timerRunning) {
-            alert("The timer is running.");
-            return false;
-        }
         setTimerRunning(true);
         return true;
     };
+    const resumeDisabled = timerRunning || secondsElapsed == 0;
     const reset = () => {
         if (confirm("Are you sure you want to reset all the timers?")) {
             setTimerRunning(false);
@@ -69,24 +65,28 @@ const TextBoxContainer = () => {
                         icon={<PlayCircle/>}
                         onCopy={start}
                         textTemplate={`Started at {time}.`}
+                        disabled={startDisabled}
                     />
                     <CopyPastableTextBox
                         label="Pause"
                         icon={<PauseCircle/>}
                         onCopy={pause}
                         textTemplate={`Paused at {time}.`}
+                        disabled={pauseDisabled}
                     />
                     <CopyPastableTextBox
                         label="Resume"
                         icon={<NotStarted/>}
                         onCopy={resume}
                         textTemplate={`Resumed at {time}.`}
+                        disabled={resumeDisabled}
                     />
                     <CopyPastableTextBox
-                        label="Stop"
-                        icon={<StopCircle/>}
+                        label="Finish"
+                        icon={<CheckCircle/>}
                         onCopy={pause}
-                        textTemplate={`Ended at {time}.`}
+                        textTemplate={`Done at {time} after {timeElapsed}.`}
+                        disabled={pauseDisabled}
                     />
                     <CopyPastableTextBox
                         label="Reset"
